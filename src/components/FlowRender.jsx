@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Background, Controls, ReactFlow } from '@xyflow/react';
+import { Background, Controls, ReactFlow, useReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { v4 as uuidv4 } from 'uuid';
 import TextNode from '../CustomeNode/TextNode';
@@ -11,6 +11,7 @@ import { RiText, RiCircleLine } from "react-icons/ri";
 import { RxSquare } from "react-icons/rx";
 import { RiTriangleLine } from "react-icons/ri";
 import TriangleNode from '../CustomeNode/TriangleNode';
+import DownloadButton from './DownloadButton';
 
 const initialNodes = [];
 const initialEdges = [];
@@ -18,6 +19,7 @@ const initialEdges = [];
 const FlowRender = () => {
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
+    const { screenToFlowPosition } = useReactFlow();
 
     const nodeTypes = {
         textNode: TextNode,
@@ -40,67 +42,72 @@ const FlowRender = () => {
         []
     );
 
-    const addTextNode = () => {
-        const newNode = {
-            id: uuidv4(), type: 'textNode',
-            position: { x: Math.random() * 300, y: Math.random() * 300 }, data: { value: 'Text Node' },
-        };
-        setNodes((node) => [...node, newNode]);
+    const handleNodeLabelChange = (id, label) => {
+        setNodes((nds) =>
+            nds.map((node) =>
+                node.id === id ? { ...node, data: { ...node.data, label } } : node
+            )
+        );
     };
 
-    const addCircleNode = () => {
-        const newNode = {
-            id: uuidv4(), data: {},
-            type: 'circle', position: { x: Math.random() * 300, y: Math.random() * 300 },
-        };
-        setNodes((node) => [...node, newNode]);
+    const deleteNode = (id) => {
+        setNodes((nodes) => nodes.filter((node) => node.id !== id));
+        setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
     };
 
-    const addSquareNode = () => {
-        const newNode = {
-            id: uuidv4(), data: {},
-            type: 'square', position: { x: Math.random() * 300, y: Math.random() * 300 },
-        };
-        setNodes((node) => [...node, newNode]);
-    };
+    const onDragStart = useCallback((event, nodeType) => {
+        event.dataTransfer.setData('application/reactflow', nodeType);
+    }, []);
 
-    const addTriangleNode = () => {
+    const onDrop = useCallback((event) => {
+        event.preventDefault()
+        const nodeType = event.dataTransfer.getData('application/reactflow');
+        if (!nodeType) return;
+        const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
+
         const newNode = {
-            id: uuidv4(), data: {},
-            type: 'triangle', position: { x: Math.random() * 300, y: Math.random() * 300 },
-        }
-        setNodes((node) => [...node, newNode]);
-    }
+            id: uuidv4(), type: nodeType,
+            position, data: { label: 'Title', onChange: handleNodeLabelChange, deleteNode: deleteNode },
+        };
+        setNodes((nds) => [...nds, newNode]);
+    },
+        [screenToFlowPosition, handleNodeLabelChange],
+    );
 
     return (
         <div style={{ height: '97vh', width: '100%' }}>
             <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange}
                 onConnect={onConnect} fitView nodeTypes={nodeTypes} edgeTypes={edgeTypes}
-                onEdgesChange={onEdgesChange}
+                onEdgesChange={onEdgesChange} onDrop={onDrop} onDragOver={(e) => e.preventDefault()}
             >
-                <Background />
                 <Controls />
+                <Background />
+                <DownloadButton />
             </ReactFlow>
 
             <div className='container'>
                 <div className='background'>
-                    <div onClick={addTextNode} className='icon'>
-                        <RiText style={{ marginTop: '23px' }} size={40} />
+                    <div className='icon' draggable onDragStart={(event) => onDragStart(event, 'textNode')}>
+                        <RiText style={{ marginTop: '20px' }} size={35} />
                     </div>
 
-                    <div onClick={addCircleNode} className='icon'>
-                        <RiCircleLine size={40} />
+                    <div className='icon' draggable onDragStart={(event) => onDragStart(event, 'circle')}>
+                        <RiCircleLine size={35} />
                     </div>
 
-                    <div onClick={addSquareNode} className='icon'>
-                        <RxSquare size={40} />
+                    <div className='icon' draggable onDragStart={(event) => onDragStart(event, 'square')}>
+                        <RxSquare size={35} />
                     </div>
 
-                    <div onClick={addTriangleNode} className='icon'>
-                        <RiTriangleLine size={40} />
+                    <div className='icon' draggable onDragStart={(event) => onDragStart(event, 'triangle')}>
+                        <RiTriangleLine size={35} />
                     </div>
                 </div>
             </div>
+
+            {/* <div className="container">
+                <button onClick={() => nodes.forEach((node) => deleteNode(node.id))}>Delete All Nodes</button>
+            </div> */}
         </div>
     );
 };

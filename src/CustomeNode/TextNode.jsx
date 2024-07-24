@@ -9,9 +9,9 @@ const TextNode = ({ data, isConnectable }) => {
 
     return (
         <div className="text_node">
-            <Handle type="target" position={Position.Top} isConnectable={isConnectable} id="top_id" />
+            <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
             <input type="text" placeholder="Titel" onChange={onChange} />
-            <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} id="bottom_id" />
+            <Handle type="source" position={Position.Bottom} isConnectable={isConnectable}/>
         </div>
     );
 };

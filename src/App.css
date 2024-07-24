@@ -2,40 +2,23 @@
     display: none;
 }
 
-.text_node input {
-    border: 1px solid #303030ad;
-    padding: 4px 5px;
-    width: 130px;
-    caret-color: #303030ad;
-    border-radius: 4px;
+.react-flow__resize-control.line{
+    border-color: #000;
 }
 
-.text_node input:focus {
-    outline: none;
+.react-flow__resize-control.handle {
+    background-color: #f00;
 }
 
-.circle_node {
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-    background-color: lightblue;
-    display: 'flex';
-    align-items: 'center';
-    justify-content: 'center'
+.react-flow__handle {
+    background-color: #474747;
 }
 
-.square_node {
-    width: 60px;
-    height: 60px;
-    background-color: lightcoral;
-    display: 'flex';
-    align-items: 'center';
-    justify-content: 'center'
-}
+/* Main Container */
 
 .container {
     position: absolute;
-    top: 28%;
+    top: 27%;
     left: 10px;
     display: flex;
     flex-direction: column;
@@ -46,21 +29,106 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80px;
+    width: 60px;
     background-color: #ffffff;
     border-radius: 4px;
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.08);;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.08);
 }
 
 .icon {
-    margin-bottom: 23px;
+    margin-bottom: 20px;
     color: #625c5cab;
 }
+
+.input {
+    width: 80%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    color: #fff;
+}
+
+.input:focus {
+    outline: none;
+}
+
+/* Text Node and */
+
+.text_node input {
+    border: 1px solid #303030ad;
+    padding: 4px 5px;
+    width: 110px;
+    caret-color: #303030ad;
+    border-radius: 4px;
+}
+
+.text_node input:focus {
+    outline: none;
+}
+
+/* Circle Node and */
+
+.circle_node {
+    border-radius: 50%;
+    background-color: #ff6600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Square Node and */
+
+.square_node {
+    background-color: #1D809F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Trangle Node and */
 
 .traingle_node {
     width: 0;
     height: 0;
     border-left: 37px solid transparent;
     border-right: 37px solid transparent;
-    border-bottom: 60px solid #7e85ee;
+    border-bottom: 60px solid #1aaee5;
+}
+
+.traingle_input {
+    position: absolute;
+    top: 44%;
+    left: 17%;
+    width: 60%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    color: #fff;
+}
+
+.traingle_input:focus {
+    outline: none;
+}
+
+/* Delete Icon */
+
+.delete-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: fit-content;
+    padding: 5px;
+    gap: 5px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.08);
+    position: absolute;
+    top: -25px;
+    left: 60px;
+}
+
+.delete_icon {
+    color: #625c5cab;
 }
