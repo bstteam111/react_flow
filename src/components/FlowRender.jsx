@@ -42,13 +42,13 @@ const FlowRender = () => {
         []
     );
 
-    const handleNodeLabelChange = (id, label) => {
+    const handleNodeLabelChange = useCallback((id, label) => {
         setNodes((nds) =>
             nds.map((node) =>
                 node.id === id ? { ...node, data: { ...node.data, label } } : node
             )
         );
-    };
+    }, []);
 
     const deleteNode = (id) => {
         setNodes((nodes) => nodes.filter((node) => node.id !== id));

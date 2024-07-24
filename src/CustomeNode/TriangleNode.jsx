@@ -17,6 +17,12 @@ const TriangleNode = ({ id, data, isConnectable }) => {
         setShowDelete(!showDelete);
     };
 
+    // const handleCopy = (event) => {
+    //     event.stopPropagation();
+    //     const newId = `${id}_copy`; 
+    //     data.copyNode(id, newId); 
+    // };
+
     return (
         <div className="traingle_node" onClick={handleNodeClick}>
             <Handle type="target" position={Position.Top} isConnectable={isConnectable}
